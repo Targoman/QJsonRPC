@@ -1,7 +1,7 @@
 ################################################################################
-#   Targoman: A robust Statistical Machine Translation framework
+#   Targoman: A robust Machine Translation framework
 #
-#   Copyright 2014-2015 by ITRC <http://itrc.ac.ir>
+#   Copyright 2014-2018 by ITRC <http://itrc.ac.ir>
 #
 #   This file is part of Targoman.
 #
