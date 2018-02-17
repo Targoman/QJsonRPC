@@ -115,11 +115,12 @@ unix{
 
   target.files= $$BaseOutput/out/$$BinFolderPattern \
                 $$BaseOutput/out/$$LibFolderPattern \
-                $$BaseOutput/out/$$LibIncludeFolderPattern \
                 $$BaseOutput/out/$$ConfigFolderPattern
 
   target.path = $$PREFIX/
-  target.extra= rm -rvf $$PREFIX/lib/lib/
+  target.extra= rm -rvf $$PREFIX/lib/lib/; cp -Lr $$BaseOutput/out/$$LibIncludeFolderPattern $$PREFIX/$$LibIncludeFolderPattern/..; rm -rvf $$PREFIX/include/include/;
+
+
 
   INSTALLS += documentation \
               target
