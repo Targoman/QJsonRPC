@@ -118,7 +118,7 @@ unix{
                 $$BaseOutput/out/$$ConfigFolderPattern
 
   target.path = $$PREFIX/
-  target.extra= rm -rvf $$PREFIX/lib/lib/; cp -Lr $$BaseOutput/out/$$LibIncludeFolderPattern $$PREFIX/$$LibIncludeFolderPattern/..; rm -rvf $$PREFIX/include/include/;
+  target.extra= rm -rvf $$PREFIX/lib/lib/; mkdir -p $$PREFIX/$$LibIncludeFolderPattern/; cp -Lr $$BaseOutput/out/$$LibIncludeFolderPattern $$PREFIX/$$LibIncludeFolderPattern/..; 
 
 
 
