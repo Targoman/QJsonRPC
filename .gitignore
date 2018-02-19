@@ -1,3 +1,4 @@
-build
+#temporary files
+\..*~
+out
 Makefile
-qjsonrpc.pro.user
