@@ -22,6 +22,11 @@
 
 pushd $(dirname $0)
 
+if [ $1 == "full" ] && [ -z "$3" ]; then
+    echo "third parameter as PREFIX is obligatory when building in full mode"
+    exit
+fi
+
 N_CORES_TO_USE=$(cat /proc/cpuinfo| grep processor | wc -l)
 N_CORES_TO_USE=$((N_CORES_TO_USE - 1))
 if [ $N_CORES_TO_USE -lt 1 ]; then
