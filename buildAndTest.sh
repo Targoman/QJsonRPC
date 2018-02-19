@@ -20,7 +20,7 @@
 ################################################################################
 #!/bin/bash
 
-cd $(dirname $0)
+pushd $(dirname $0)
 
 N_CORES_TO_USE=$(cat /proc/cpuinfo| grep processor | wc -l)
 N_CORES_TO_USE=$((N_CORES_TO_USE - 1))
@@ -39,18 +39,39 @@ fi
 
 echo "Using $QMAKE_COMMAND and $N_CORES_TO_USE processing cores for build ..."
 
-#TODO -Werror
-
-BasePath=`pwd`
-export LD_LIBRARY_PATH="$BasePath/out/lib"
-if [ "$2" != "release" ] ; then
-  QMAKE_CONFIG="CONFIG+=debug CONFIG+=WITH_QJsonRPC"
+echo "Building SubModules"
+mkdir -p out
+if [ -z "$3" ]; then
+    BaseOutput=$(readlink -f ./out)
 else
-  QMAKE_CONFIG="CONFIG+=WITH_QJsonRPC"
+    BaseOutput=$3
 fi
 
+echo "Base Output Path will be $BaseOutput"
+
+
+function installTargomanProject(){
+    pushd $1 && \
+    if [ -z "$2" ];then FirstArg="NULL"; else FirstArg="$2"; fi && \
+    if [ -z "$3" ];then SecondArg="NULL"; else SecondArg="$3"; fi && \
+    ./buildAndTest.sh "$FirstArg" "$SecondArg" "$BaseOutput" && \
+    make install && \
+    popd
+}
+
+echo "Building Module"
+#TODO -Werror
+
+BasePath=$BaseOutput
+export LD_LIBRARY_PATH="$BasePath/out/lib"
+if [ "$2" != "release" ] ; then
+  QMAKE_CONFIG="CONFIG+=debug CONFIG+=WITH_QJsonRPC PREFIX=${@:3}"
+else
+  QMAKE_CONFIG="CONFIG+=WITH_QJsonRPC PREFIX=${@:3}"
+fi
 
 if [ "$1" == "full" ]; then
+    echo "Building in full Mode with: $QMAKE_COMMAND $QMAKE_CONFIG"
     rm -rf out
     rm -f `find ./ -name 'Makefile*'`
     mkdir -p out/include
@@ -77,9 +98,10 @@ if [ "$1" == "full" ]; then
         fi
     fi
 else
+    echo "Building incremental with: $QMAKE_COMMAND $QMAKE_CONFIG"
     mkdir -p out/include
     $QMAKE_COMMAND $QMAKE_CONFIG
-    make -j 8
+    make -j $N_CORES_TO_USE
     if [ $? -ne 0 ];then
     echo -e "\n\e[31m!!!!!!!!!!!!!!!!! Build Has failed!!!!!!!!!!!!!!!! \e[39m\n"
     exit 1;
@@ -88,8 +110,11 @@ else
     fi
 fi
 
-cd "$BasePath"
-mkdir -p ./out/scripts
-for Path in ./Scripts/*; do
-  ln -snf "../../$Path" "./out/scripts/${Path#./Scripts/}"
-done
+#if [ -d "./scripts" ]; then
+#    mkdir -p $BaseOutput/scripts
+#    for Path in $(ls ./scripts/); do
+#    ln -snf $readlink("./scripts/$Path") "./out/scripts/"
+#    done
+#fi
+
+popd
