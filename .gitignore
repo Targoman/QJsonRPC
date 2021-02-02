@@ -2,3 +2,5 @@
 \..*~
 out
 Makefile
+*.pro.user
+*.stash

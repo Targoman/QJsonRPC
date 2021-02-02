@@ -1,26 +1,27 @@
-BasePath = "../../.."
-
+################################################################################
+#   TargomanBuildSystem
+#
+#   Copyright 2010-2021 by Targoman Intelligent Processing <http://tip.co.ir>
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+################################################################################
+TEST_NAME= tst_qjsonrpcservice
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
+HEADERS =
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 SOURCES = tst_qjsonrpcservice.cpp
 
-################################################################################
-#                       DO NOT CHANGE ANYTHING BELOW                           #
-################################################################################
-ConfigFile = $$BasePath/Configs.pri
-!exists($$ConfigFile){
-error("**** libsrc: Unable to find Configuration file $$ConfigFile ****")
-}
-include ($$ConfigFile)
 
-
-TEMPLATE = app
-QT+=testlib
-TARGET = tst_qjsonrpcservice
-DESTDIR = $$BaseUnitTestBinFolder
-OBJECTS_DIR = $$BaseBuildFolder/obj
-MOC_DIR = $$BaseBuildFolder/moc
-INCLUDEPATH += $$BasePath/libsrc
-QMAKE_LIBDIR += $$BaseLibraryFolder
-LIBS += -l$$ProjectName
-INCLUDEPATH+=$$BasePath/libsrc/libQJsonRPC/Private/
-INCLUDEPATH+=$$BasePath/libsrc/libQJsonRPC/
+################################################################################
+include(../../../qmake/testconfigs.pri)
 

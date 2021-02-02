@@ -1,33 +1,22 @@
 ################################################################################
-#   Targoman: A robust Machine Translation framework
+#   TargomanBuildSystem
 #
-#   Copyright 2014-2018 by ITRC <http://itrc.ac.ir>
+#   Copyright 2010-2021 by Targoman Intelligent Processing <http://tip.co.ir>
 #
-#   This file is part of Targoman.
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
 #
-#   Targoman is free software: you can redistribute it and/or modify
-#   it under the terms of the GNU Lesser General Public License as published by
-#   the Free Software Foundation, either version 3 of the License, or
-#   (at your option) any later version.
+#    http://www.apache.org/licenses/LICENSE-2.0
 #
-#   Targoman is distributed in the hope that it will be useful,
-#   but WITHOUT ANY WARRANTY; without even the implied warranty of
-#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#   GNU Lesser General Public License for more details.
-#
-#   You should have received a copy of the GNU Lesser General Public License
-#   along with Targoman. If not, see <http://www.gnu.org/licenses/>.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ################################################################################
-BasePath = ".."
-
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
-HEADERS += \
-    libQJsonRPC/Private/qjsonrpcservice_p.h \
-    libQJsonRPC/Private/qjsonrpcsocket_p.h \
-    libQJsonRPC/Private/qjsonrpcabstractserver_p.h \
-    libQJsonRPC/Private/qjsonrpcservicereply_p.h \
-    libQJsonRPC/Private/qjsonrpchttpserver_p.h \
-    libQJsonRPC/Private/http-parser/http_parser.h \
+DIST_HEADERS += \
     libQJsonRPC/qjsonrpcmessage.h \
     libQJsonRPC/qjsonrpcservice.h \
     libQJsonRPC/qjsonrpcsocket.h \
@@ -40,8 +29,16 @@ HEADERS += \
     libQJsonRPC/qjsonrpchttpclient.h \
     libQJsonRPC/qjsonrpchttpserver.h \
     libQJsonRPC/qjsonrpchttpservermultithreaded.h \
-    libQJsonRPC/Private/qjsonrpchttpservermultithreaded_p.h
 
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
+PRIVATE_HEADERS += \
+    libQJsonRPC/Private/qjsonrpcservice_p.h \
+    libQJsonRPC/Private/qjsonrpcsocket_p.h \
+    libQJsonRPC/Private/qjsonrpcabstractserver_p.h \
+    libQJsonRPC/Private/qjsonrpcservicereply_p.h \
+    libQJsonRPC/Private/qjsonrpchttpserver_p.h \
+    libQJsonRPC/Private/http-parser/http_parser.h \
+    libQJsonRPC/Private/qjsonrpchttpservermultithreaded_p.h
 
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 SOURCES += \
@@ -58,28 +55,9 @@ SOURCES += \
     libQJsonRPC/Private/http-parser/http_parser.c \
     libQJsonRPC/qjsonrpchttpservermultithreaded.cpp
 
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
+OTHER_FILES += \
+
 ################################################################################
-#                       DO NOT CHANGE ANYTHING BELOW                           #
-################################################################################
-ConfigFile = $$BasePath/Configs.pri
-!exists($$ConfigFile){
-error("**** libsrc: Unable to find Configuration file $$ConfigFile ****")
-}
-include ($$ConfigFile)
-
-TEMPLATE = lib
-TARGET = $$ProjectName
-DESTDIR = $$BaseLibraryFolder
-OBJECTS_DIR = $$BaseBuildFolder/obj
-MOC_DIR = $$BaseBuildFolder/moc
-QMAKE_CXXFLAGS_RELEASE += -fPIC
-QMAKE_CXXFLAGS_DEBUG += -fPIC
-INCLUDEPATH+=lib$$ProjectName
-
-build_static {
-    DEFINES += TARGOMAN_BUILD_STATIC
-    CONFIG+= staticlib
-}
-
-QMAKE_POST_LINK += $$BaseOutput/linuxPostBuild.sh lib$$ProjectName $$BaseLibraryIncludeFolder $$BaseConfigFolder
+include(../qmake/libconfigs.pri)
 

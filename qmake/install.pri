@@ -15,13 +15,36 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 ################################################################################
-TEST_NAME= tst_qjsonrpcmetatype
-# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
-HEADERS =
-# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
-SOURCES = tst_qjsonrpcmetatype.cpp
+!contains(CONFIG, no_install) {
+    INCLUDE_PREFIX = $$[QT_INSTALL_HEADERS]/
+    LIB_PREFIX     = $$[QT_INSTALL_LIBS]
+    EXAMPLES_PREFIX= $$[QT_INSTALL_EXAMPLES]
+
+    unix:!isEmpty(PREFIX){
+            INCLUDE_PREFIX = $$PREFIX/include/
+            contains(QT_ARCH, x86_64){
+                LIB_PREFIX     = $$PREFIX/lib64
+            } else {
+                LIB_PREFIX     = $$PREFIX/lib
+            }
+    }
+
+    PRJ_BASE_DIR = $${dirname(PWD)}
+    for(header, DIST_HEADERS) {
+      relPath = $${relative_path($$header, $$PRJ_BASE_DIR)}
+      path = $${INCLUDE_PREFIX}/$${dirname(relPath)}
+      eval(headers_$${path}.files += $$relPath)
+      eval(headers_$${path}.path = $$path)
+      eval(INSTALLS *= headers_$${path})
+    }
+
+    target = $$TARGET
+    target.path = $$LIB_PREFIX
+
+    INSTALLS += target
+}
 
 
-################################################################################
-include(../../../qmake/testconfigs.pri)
+
+
 

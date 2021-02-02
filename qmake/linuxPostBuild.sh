@@ -1,22 +1,19 @@
 ################################################################################
-#     Targoman: A robust Machine Translation framework
+#   TargomanBuildSystem
 #
-#     Copyright 2014-2018 by ITRC <http://itrc.ac.ir>
+#   Copyright 2010-2021 by Targoman Intelligent Processing <http://tip.co.ir>
 #
-#     This file is part of Targoman.
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
 #
-#     Targoman is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU Lesser General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
+#    http://www.apache.org/licenses/LICENSE-2.0
 #
-#     Targoman is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.    See the
-#     GNU Lesser General Public License for more details.
-#
-#     You should have received a copy of the GNU Lesser General Public License
-#     along with Targoman. If not, see <http://www.gnu.org/licenses/>.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ################################################################################
 #!/bin/sh
 
@@ -31,29 +28,31 @@ for File in $(find "$BasePath" -name "*.h" -o -name "*.hpp" -o -name "*.hh"); do
     SrcName=$(basename $File);
     # Check if the header is private
     if echo "$SrcPath" | egrep "\bPrivate\b" 2>&1 > /dev/null; then
-        echo "Ignoring private header $File ...";
+        echo -e "\e[33mIgnoring private header $File ...\e[0m";
     else
         TgtPath="$IncludeTarget/$BasePath/$(python -c "import os.path; print os.path.relpath('$SrcPath', '$BasePath')")";
         SrcPath="$(python -c "import os.path; print os.path.relpath('$SrcPath', '$TgtPath')")";
         if [ -r "$TgtPath/$SrcName" ]; then
-            echo "Already exists $File ...";
+            echo -e "\e[33mAlready exists $File ...\e[0m";
         else
             mkdir -pv "$TgtPath" || : ;
-            echo "Creating symbolic link for $File ...";
+            echo -e "\e[34mCreating symbolic link for $File ...\e[0m";
             # DO NOT USE $File BECAUSE THE SYMBOLIC LINK
             # MUST POINT TO A RELATIVE PATH
             ln -s "$SrcPath/$SrcName" "$TgtPath/$SrcName" || : ;
         fi
     fi
 done
-# No need to remove anything anymore!
-#rm -rvf $IncludeTarget/$BasePath/Private || :
+
+echo -e "\e[32mHeaders symlinked to $IncludeTarget\e[0m"
 
 # Config files will be copied only when the exist!
-if find "conf/"* 2>&1 > /dev/null; then
+if [ -d conf ]; then
     mkdir -p $ConfigTarget    || : ;
-    echo "Copying config files ...";
+    echo -e "\e[34Copying config files ...\e[0m";
     cp -rvf "conf/"* $ConfigTarget || : ;
+    echo -e "\e[32mConfigs exported to $ConfigTarget\e[0m";
 else
-    echo "No config files to copy ...";
+    echo -e "\e[32mNo config files to copy\e[0m";
 fi
+
