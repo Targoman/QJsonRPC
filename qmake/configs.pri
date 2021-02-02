@@ -22,6 +22,7 @@ include ($$VersionFile)
 
 !defined(ProjectName, var): error(ProjectName not specified)
 !defined(VERSION, var): error(ProjectVERSION not specified)
+!defined(PREFIX, var): PREFIX=~/local
 
 #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-
 CONFIG(debug, debug|release): DEFINES += TARGOMAN_SHOW_DEBUG=1

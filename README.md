@@ -20,7 +20,6 @@ Help / Questions / Suggestions
 
 Requirements
 ============
-
 - Qt 5 or greater
 
 Features
@@ -32,16 +31,13 @@ Features
 
 Building
 ========
-
-    mkdir build
-    cd build
-    qmake .. && make install
+    qmake && make install
 
 You can pass the following arguments to qmake:
 
     PREFIX=<prefix>                 to change the install prefix
                                     default:
-                                        unix:  /usr
+                                        unix:  ~/local
                                         other: $$[QT_INSTALL_PREFIX]
-    QJSONRPC_LIBRARY_TYPE=staticlib to build a static version of the library
+    LIB_TYPE=staticlib              to build a static version of the library
     -config private-headers         build with qt private headers (to reduce allocations)
