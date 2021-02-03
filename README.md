@@ -1,4 +1,4 @@
-[![Build Status](https://drone.io/bitbucket.org/devonit/qjsonrpc/status.png)](https://drone.io/bitbucket.org/devonit/qjsonrpc/latest)
+<!-- [![Build Status](https://drone.io/bitbucket.org/devonit/qjsonrpc/status.png)](https://drone.io/bitbucket.org/devonit/qjsonrpc/latest) -->
 
 Overview
 =======

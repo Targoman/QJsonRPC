@@ -1,19 +1,10 @@
 ################################################################################
-#   TargomanBuildSystem
+#   QBuildSystem
 #
-#   Copyright 2010-2021 by Targoman Intelligent Processing <http://tip.co.ir>
+#   Copyright(c) 2021 by Targoman Intelligent Processing <http://tip.co.ir>
 #
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
+#   Redistribution and use in source and binary forms are allowed under the
+#   terms of BSD License 2.0.
 ################################################################################
 PRJ_BASE_DIR=$$absolute_path(..)
 VersionFile=$$PRJ_BASE_DIR/version.pri
@@ -23,6 +14,7 @@ include ($$VersionFile)
 !defined(ProjectName, var): error(ProjectName not specified)
 !defined(VERSION, var): error(ProjectVERSION not specified)
 !defined(PREFIX, var): PREFIX=~/local
+!defined(DONT_BUILD_DEPS, var): DONT_BUILD_DEPS=0
 
 #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-
 CONFIG(debug, debug|release): DEFINES += TARGOMAN_SHOW_DEBUG=1
@@ -35,12 +27,12 @@ DEFINES += PROJ_VERSION=$$VERSION
 
 #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-
 contains(QT_ARCH, x86_64){
-    LibFolderPattern     = $$PREFIX/lib64
+    LibFolderPattern     = lib64
 } else {
-    LibFolderPattern     = $$PREFIX/lib
+    LibFolderPattern     = lib
 }
-ModulesFolderPattern    = $$PREFIX/modules
-LibIncludeFolderPattern = $$PREFIX/include
+ModulesFolderPattern    = modules
+LibIncludeFolderPattern = include
 BinFolderPattern        = bin
 BuildFolderPattern      = build
 TestBinFolder           = test
@@ -105,22 +97,17 @@ defineTest(addSubdirs) {
 }
 
 #+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-
-DEPS_BUILT = $$PRJ_BASE_DIR/out/.depsBuilt
-Dependencies.target  = $$DEPS_BUILT
-Dependencies.depends = FORCE
-unix: Dependencies.commands = $$PRJ_BASE_DIR/qmake/buildDeps.sh $$PRJ_BASE_DIR $$DEPS_BUILT $$DONT_BUILD_DEPS;
-win32: error(submodule auto-compile has not yet been implemented for windows)
-
-PRE_TARGETDEPS += $$DEPS_BUILT
-QMAKE_EXTRA_TARGETS += Dependencies
-QMAKE_DISTCLEAN += $$DEPS_BUILT
-
-HEADERS+= $$VERSIONINGHEADER
-
-#+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-
 message("*******************   $$ProjectName BASE CONFIG  ************************ ")
 message("* Building $$ProjectName Ver. $$VERSION")
 message("* Base Project Path :  $$absolute_path(..)")
 message("* Base build target : $$PRJ_BASE_DIR/out")
 message("* Install Path      : $$PREFIX/")
+message("* Definitions       : $$DEFINES")
+message("* DONT_BUILD_DEPS   : $$DONT_BUILD_DEPS")
+message("* DISABLED_DEPS     : $$DISABLED_DPES")
 message("******************************************************************** ")
+
+!defined(CONFIG_TYPE, var) {
+    unix: system($$PRJ_BASE_DIR/qmake/buildDeps.sh $$PRJ_BASE_DIR $$PRJ_BASE_DIR/out/.depsBuilt $$DONT_BUILD_DEPS $$DISABLED_DPES)
+    win32: error(submodule auto-compile has not yet been implemented for windows)
+}

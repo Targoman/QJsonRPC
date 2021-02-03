@@ -1,8 +1,25 @@
+################################################################################
+#   QBuildSystem
+#
+#   Copyright(c) 2021 by Targoman Intelligent Processing <http://tip.co.ir>
+#
+#   Redistribution and use in source and binary forms are allowed under the
+#   terms of BSD License 2.0.
+################################################################################
 #!/bin/bash
+source `dirname ${BASH_SOURCE[0]}`/helper.shi
 
-ExternalDeps=$3
-DEPS_BUILT=$(realpath $(dirname $2))/$(basename $2)
-cd $(realpath $1)
+PROJECT_BASE_DIR=$1
+DEPS_BUILT_FILE=$2
+DONT_BUILD_DEPS=$3
+
+if [ "$DONT_BUILD_DEPS" -eq 1 ]; then
+    warn "Dependency build has been disabled"
+    exit 0;
+fi
+
+DEPS_BUILT=$(realpath $(dirname $DEPS_BUILT_FILE))/$(basename $DEPS_BUILT_FILE)
+cd $(realpath $PROJECT_BASE_DIR)
 BASE_PATH=$(pwd)
 
 CPU_COUNT=$(cat /proc/cpuinfo | grep processor | wc -l)
@@ -12,7 +29,7 @@ QMAKE_CLI=qmake-qt5
 if ! which $QMAKE_CLI >/dev/null 2>&1; then
     QMAKE_CLI=qmake
     if ! which $QMAKE_CLI >/dev/null 2>&1; then
-        echo "Error finding the `qmake` command." 1>&2
+        error "'qmake' command not found"
         exit 1
     fi
 fi
@@ -20,7 +37,7 @@ fi
 echo "Using $QMAKE_CLI ..."
 
 if ! grep "Using Qt version 5." <<< $($QMAKE_CLI -v) >/dev/null 2>&1; then
-    echo "Qt version 5.x is needed for compiling this library." 1>&2
+    error "Qt version 5.x is needed for compiling this library."
     exit 1
 fi
 
@@ -29,22 +46,22 @@ mkdir -p $BASE_PATH/out
 if [ -f .gitmodules ]; then
   Deps=$(grep "\[submodule " .gitmodules | cut -d ' ' -f 2 | tr -d '\"\]')
   for Dep in $Deps; do
-    echo -e "\n\n=====================> Building $Dep <========================\n"
-    if [ $ExternalDeps -eq 1 ]; then
-      echo -e "Target building ignored as must be used as external\n"
+    info "\n=====================> Building $Dep <========================"
+    if [[ " ${@:4} " =~ " $(basename $Dep) " ]]; then
+      ignore "Dependency $Dep building ignored as specified"
       continue
     fi
     if  fgrep "$Dep" "$DEPS_BUILT" >/dev/null 2>&1; then
-        echo "Target has already been built."
+        ignore "Dependency $Dep has already built."
         continue
     fi
     pushd $Dep
       if [ -r *".pro" ]; then
           make distclean
-          $QMAKE_CLI PREFIX=$BASE_PATH/out
+          $QMAKE_CLI PREFIX=$BASE_PATH/out DONT_BUILD_DEPS=1
           make install -j $CPU_COUNT
           if [ $? -ne 0 ]; then
-            echo "Error building qmake project"
+          error "Error building $Dep as Qt project"
             exit 1
           fi
       elif [ -r "CMakeLists.txt" ];then
@@ -53,15 +70,16 @@ if [ -f .gitmodules ]; then
             cmake -DCMAKE_INSTALL_PREFIX:PATH=$BASE_PATH/out ..
             make install -j $CPU_COUNT
             if [ $? -ne 0 ]; then
-                echo "Error building qmake project"
+                error "Error building $Dep as CMake project"
                 exit 1
             fi
           popd
       else
-        echo -e "\n\n[WARNING] Project: $Dep type could not be determined so will not be compiled\n\n"
+        warn "Dependency $Dep type could not be determined so will not be compiled"
       fi
-      echo "echo $Dep >> $DEPS_BUILT"
       echo $Dep >> $DEPS_BUILT
     popd
   done
 fi 
+
+happy "Dependency build finished\n"
