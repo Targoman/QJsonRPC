@@ -43,6 +43,11 @@ fi
 
 mkdir -p $BASE_PATH/out
 
+DisabledDeps=''
+for Disabled in ${@:4}; do
+    DisabledDeps="$DisabledDeps $Disabled=0"
+done
+
 if [ -f .gitmodules ]; then
   Deps=$(grep "\[submodule " .gitmodules | cut -d ' ' -f 2 | tr -d '\"\]')
   for Dep in $Deps; do
@@ -58,7 +63,7 @@ if [ -f .gitmodules ]; then
     pushd $Dep
       if [ -r *".pro" ]; then
           make distclean
-          $QMAKE_CLI PREFIX=$BASE_PATH/out DONT_BUILD_DEPS=1
+          $QMAKE_CLI PREFIX=$BASE_PATH/out DONT_BUILD_DEPS=1 $DisabledDeps
           make install -j $CPU_COUNT
           if [ $? -ne 0 ]; then
           error "Error building $Dep as Qt project"
