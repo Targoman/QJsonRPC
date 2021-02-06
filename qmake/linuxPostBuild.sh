@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ################################################################################
 #   QBuildSystem
 #
@@ -22,8 +22,8 @@ for File in $(find "$BasePath" -name "*.h" -o -name "*.hpp" -o -name "*.hh"); do
     if echo "$SrcPath" | egrep "\bPrivate\b" 2>&1 > /dev/null; then
         ignore "Ignoring private header $File ..."
     else
-        TgtPath="$IncludeTarget/$BasePath/$(python -c "import os.path; print os.path.relpath('$SrcPath', '$BasePath')")";
-        SrcPath="$(python -c "import os.path; print os.path.relpath('$SrcPath', '$TgtPath')")";
+        TgtPath="$IncludeTarget/$BasePath/$(python -c "import os.path; print(os.path.relpath('$SrcPath', '$BasePath'))")";
+        SrcPath="$(python -c "import os.path; print(os.path.relpath('$SrcPath', '$TgtPath'))")";
         if [ -r "$TgtPath/$SrcName" ]; then
             ignore "Already exists $File ...";
         else
