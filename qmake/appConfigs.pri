@@ -6,8 +6,8 @@
 #   Redistribution and use in source and binary forms are allowed under the
 #   terms of BSD License 2.0.
 ################################################################################
-CONFIG_TYPE="App"
 include (./configs.pri)
+CONFIG_TYPE="App"
 
 !defined(APP_NAME, var): APP_NAME=$$ProjectName
 

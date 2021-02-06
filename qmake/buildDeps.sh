@@ -1,3 +1,4 @@
+#!/bin/bash
 ################################################################################
 #   QBuildSystem
 #
@@ -6,7 +7,6 @@
 #   Redistribution and use in source and binary forms are allowed under the
 #   terms of BSD License 2.0.
 ################################################################################
-#!/bin/bash
 source `dirname ${BASH_SOURCE[0]}`/helper.shi
 
 PROJECT_BASE_DIR=$1
