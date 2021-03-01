@@ -7,9 +7,11 @@
 #   terms of BSD License 2.0.
 ################################################################################
 PRJ_BASE_DIR=$$absolute_path(..)
-VersionFile=$$PRJ_BASE_DIR/version.pri
-!exists($$VersionFile): error("**** libsrc: Unable to find version info file $$VersionFile ****")
-include ($$VersionFile)
+!defined(VERSION, var){
+    VersionFile=$$PRJ_BASE_DIR/version.pri
+    !exists($$VersionFile): error("**** libsrc: Unable to find version info file $$VersionFile ****")
+    include ($$VersionFile)
+}
 
 !defined(ProjectName, var): error(ProjectName not specified)
 !defined(VERSION, var): error(ProjectVERSION not specified)
@@ -32,6 +34,7 @@ contains(QT_ARCH, x86_64){
     LibFolderPattern     = lib
 }
 ModulesFolderPattern    = modules
+PluginsFolderPattern    = plugins
 LibIncludeFolderPattern = include
 BinFolderPattern        = bin
 BuildFolderPattern      = build
@@ -42,6 +45,7 @@ ConfigFolderPattern     = conf
 
 BaseLibraryFolder        = $$PRJ_BASE_DIR/out/$$LibFolderPattern
 BaseModulesFolder        = $$PRJ_BASE_DIR/out/$$ModulesFolderPattern
+BasePluginsFolder        = $$PRJ_BASE_DIR/out/$$PluginsFolderPattern
 BaseLibraryIncludeFolder = $$PRJ_BASE_DIR/out/$$LibIncludeFolderPattern
 BaseBinFolder            = $$PRJ_BASE_DIR/out/$$BinFolderPattern
 BaseTestBinFolder        = $$PRJ_BASE_DIR/out/$$TestBinFolder

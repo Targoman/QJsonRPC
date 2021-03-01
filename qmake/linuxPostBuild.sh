@@ -15,11 +15,11 @@ ConfigTarget=$3
 
 # Creating a symbolic link reduces the pain of ambigious changes in headers!
 #cp -vrf --parents `find $BasePath -name *.h -o -name *.hpp -o -name *.hh` $IncludeTarget || :
-for File in $(find "$BasePath" -name "*.h" -o -name "*.hpp" -o -name "*.hh"); do
+for File in $(find "$BasePath/" -name "*.h" -o -name "*.hpp" -o -name "*.hh"); do
     SrcPath=$(dirname $File);
     SrcName=$(basename $File);
     # Check if the header is private
-    if echo "$SrcPath" | egrep "\bPrivate\b" 2>&1 > /dev/null; then
+    if echo "$SrcPath" | egrep "\b[P|p]rivate\b" 2>&1 > /dev/null; then
         ignore "Ignoring private header $File ..."
     else
         TgtPath="$IncludeTarget/$BasePath/$(python -c "import os.path; print(os.path.relpath('$SrcPath', '$BasePath'))")";

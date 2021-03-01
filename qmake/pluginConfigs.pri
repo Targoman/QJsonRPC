@@ -10,8 +10,9 @@ CONFIG_TYPE="library"
 include (./configs.pri)
 
 TEMPLATE = lib
-defined(LibName, var): TARGET = $$LibName
-!defined(LibName, var): TARGET = $$ProjectName
+CONFIG += plugin
+defined(PluginName): TARGET = $$PluginName
+!defined(PluginName): TARGET = $$ProjectName
 
 QMAKE_CXXFLAGS_RELEASE += -fPIC
 QMAKE_CXXFLAGS_DEBUG += -fPIC
@@ -28,17 +29,10 @@ HEADERS += $$DIST_HEADERS \
            $$PRIVATE_HEADERS \
            $$SUBMODULE_HEADERS \
 
-DESTDIR      = $$BaseLibraryFolder
+DESTDIR      = $$BaseFolder
 
 include(./common.pri)
 
-defined(LIB_PREFIX, var){
-    QMAKE_POST_LINK += $$PRJ_BASE_DIR/qmake/linuxPostBuild.sh $$LIB_PREFIX $$BaseLibraryIncludeFolder $$BaseConfigFolder
-}else{
-    QMAKE_POST_LINK += $$PRJ_BASE_DIR/qmake/linuxPostBuild.sh lib$$ProjectName $$BaseLibraryIncludeFolder $$BaseConfigFolder
-}
-
-include(./install.pri)
 
 
  

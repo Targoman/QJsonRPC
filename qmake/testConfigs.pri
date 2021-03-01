@@ -14,6 +14,8 @@ include (./configs.pri)
 TEMPLATE = app
 TARGET=$$TEST_NAME
 QT+=testlib
+CONFIG      += console
+osx:CONFIG  -= app_bundle
 
 DESTDIR      = $$BaseTestBinFolder
 
