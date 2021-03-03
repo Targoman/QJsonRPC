@@ -13,4 +13,4 @@ HEADERS =
 SOURCES = tst_qjsonrpchttpserver.cpp
 
 ################################################################################
-include(../../../qmake/testConfigs.pri)
+include($$QBUILD_PATH/templates/testConfigs.pri)

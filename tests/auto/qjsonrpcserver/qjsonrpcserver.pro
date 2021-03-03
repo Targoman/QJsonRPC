@@ -15,7 +15,6 @@ SOURCES = \
     testservices.cpp \
     tst_qjsonrpcserver.cpp
 
-
 ################################################################################
-include(../../../qmake/testConfigs.pri)
+include($$QBUILD_PATH/templates/testConfigs.pri)
 

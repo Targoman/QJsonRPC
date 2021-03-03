@@ -13,5 +13,5 @@ HEADERS =
 SOURCES = tst_qjsonrpcmessage.cpp
 
 ################################################################################
-include(../../../qmake/testConfigs.pri)
+include($$QBUILD_PATH/templates/testConfigs.pri)
 

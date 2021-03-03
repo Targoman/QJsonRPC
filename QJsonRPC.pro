@@ -6,14 +6,14 @@
 #   Redistribution and use in source and binary forms are allowed under the
 #   terms of BSD License 2.0.
 ################################################################################
-include (./configs.pri)
-CONFIG_TYPE="App"
+include($$QBUILD_PATH/templates/projectConfigs.pri)
 
-!defined(APP_NAME, var): APP_NAME=$$ProjectName
+addSubdirs(libsrc)
+addSubdirs(tests, libsrc)
 
-TEMPLATE = app
-TARGET=$$APP_NAME
+# +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
+OTHER_FILES += \
+    README.md \
+    INSTALL \
+    LICENSE
 
-DESTDIR      = $$BaseBinFolder
-
-include(./common.pri)

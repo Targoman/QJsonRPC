@@ -31,8 +31,10 @@ Features
 
 Building
 ========
-    qmake && make install
-
+```
+git submodule update --init --recursive
+qmake && make install
+```
 You can pass the following arguments to qmake:
 
     PREFIX=<prefix>                 to change the install prefix

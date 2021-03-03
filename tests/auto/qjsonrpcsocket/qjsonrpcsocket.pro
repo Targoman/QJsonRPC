@@ -15,7 +15,7 @@ SOURCES = tst_qjsonrpcsocket.cpp
 RESOURCES = tst_qjsonrpcsocket.qrc
 
 ################################################################################
-include(../../../qmake/testConfigs.pri)
+include($$QBUILD_PATH/templates/testConfigs.pri)
 
 
 

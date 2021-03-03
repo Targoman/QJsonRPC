@@ -12,7 +12,6 @@ HEADERS =
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 SOURCES = tst_qjsonrpcservice.cpp
 
-
 ################################################################################
-include(../../../qmake/testConfigs.pri)
+include($$QBUILD_PATH/templates/testConfigs.pri)
 
